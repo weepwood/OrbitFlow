@@ -1,0 +1,19 @@
+@import 'tailwindcss';
+@import '../../vendor/livewire/flux/dist/flux.css';
+@source '../views/**/*.blade.php';
+@source '../../app/Livewire/**/*.php';
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: Inter, 'Noto Sans SC', ui-sans-serif, system-ui, sans-serif;
+  --color-brand-50: #eef2ff;
+  --color-brand-500: #6366f1;
+  --color-brand-600: #4f46e5;
+}
+:root { color-scheme: light; }
+.dark { color-scheme: dark; }
+body { font-family: var(--font-sans); }
+.surface { @apply rounded-2xl border border-zinc-200/85 bg-white shadow-sm dark:border-zinc-700 dark:bg-zinc-900; }
+.stat-value { @apply mt-3 text-3xl font-semibold tracking-tight text-zinc-950 dark:text-white; }
+.section-kicker { @apply text-[11px] font-semibold uppercase tracking-[0.18em] text-indigo-600 dark:text-indigo-400; }
+.dot { @apply inline-block h-2 w-2 rounded-full; }

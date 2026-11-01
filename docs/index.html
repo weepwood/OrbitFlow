@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f8fb">
+  <meta name="description" content="OrbitFlow — 使用 Flux UI 打造的团队协作 SaaS，GitHub Pages 交互式静态演示。">
+  <title>OrbitFlow · Workspace Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+  <script defer src="./app.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="侧边导航">
+      <div class="brand"><span class="brand-logo"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 6.5 12 3l7 3.5V17l-7 4-7-4V6.5Z" stroke="currentColor" stroke-width="1.6"/><path d="m5 6.5 7 4 7-4M12 10.5V21" stroke="currentColor" stroke-width="1.6"/></svg></span><span>OrbitFlow</span><span class="brand-beta">BETA</span></div>
+      <button class="workspace-switch" id="workspace-switch" title="当前演示工作区"><span class="workspace-avatar">S</span><span class="workspace-name"><strong>Studio Workspace</strong><small>Free workspace</small></span><span class="dim">⌄</span></button>
+      <p class="section-label">工作空间</p>
+      <nav class="nav-group" id="main-nav">
+        <button data-page="dashboard" class="nav-item active"><span class="nav-icon">▦</span>工作台 <span class="nav-shortcut">⌘1</span></button>
+        <button data-page="projects" class="nav-item"><span class="nav-icon">▤</span>项目管理 <span class="nav-count" id="project-count-nav">4</span></button>
+        <button data-page="team" class="nav-item"><span class="nav-icon">♧</span>团队成员</button>
+        <button data-page="billing" class="nav-item"><span class="nav-icon">◇</span>订阅计划</button>
+      </nav>
+      <p class="section-label">偏好设置</p>
+      <nav class="nav-group"><button data-page="settings" class="nav-item"><span class="nav-icon">⚙</span>设置</button><a class="nav-item" href="https://github.com/weepwood/OrbitFlow" target="_blank" rel="noopener noreferrer"><span class="nav-icon">↗</span>GitHub 源码</a></nav>
+      <div class="sidebar-bottom"><div class="side-tip"><span class="tip-dot"></span><strong>这是交互式静态演示</strong><p>本地保存体验数据；正式账号与数据服务需要 Laravel 后端。</p></div><button class="profile" id="profile"><span class="profile-avatar">WW</span><span><strong>Demo User</strong><small>Workspace owner</small></span><span class="dim">•••</span></button></div>
+    </aside>
+    <div class="main-column">
+      <header class="topbar"><div class="breadcrumb"><button class="mobile-menu" id="mobile-menu" aria-label="打开菜单">☰</button><span>Studio Workspace</span><span class="divider-slash">/</span><strong id="breadcrumb-title">工作台</strong></div><div class="top-actions"><span class="demo-chip"><span class="dot"></span> DEMO MODE</span><button class="icon-button" id="theme-toggle" aria-label="切换主题" title="切换主题">☾</button><button class="icon-button" id="reset-demo" aria-label="重置演示数据" title="重置演示数据">↺</button><span class="tiny-avatar">WW</span></div></header>
+      <main class="main-content">
+        <section class="page-panel" id="page-dashboard">
+          <div class="page-head"><div><p class="eyebrow">MONDAY, WORKSPACE OVERVIEW <span class="eyebrow-line"></span> ORBITFLOW</p><h1>工作台概览 <span class="wave">✳</span></h1><p class="page-subtitle">集中关注重要事项，让每一次协作都更清晰。</p></div><button class="primary-button" data-action="new-project"><span>＋</span> 创建项目</button></div>
+          <div class="stats-grid"><div class="stat-card"><div class="stat-top"><span>全部项目</span><span class="stat-symbol indigo">▤</span></div><div class="stat-number" id="stat-projects">4</div><div class="stat-bottom"><span class="up">↗ +12.5%</span> 过去 30 天</div></div><div class="stat-card"><div class="stat-top"><span>进行中项目</span><span class="stat-symbol blue">⌁</span></div><div class="stat-number" id="stat-active">3</div><div class="stat-bottom"><span class="muted-circle"></span> 正在推进</div></div><div class="stat-card"><div class="stat-top"><span>全部任务</span><span class="stat-symbol purple">☷</span></div><div class="stat-number" id="stat-tasks">8</div><div class="stat-bottom"><span class="muted-circle"></span> 进行跟踪</div></div><div class="stat-card"><div class="stat-top"><span>已完成任务</span><span class="stat-symbol green">✓</span></div><div class="stat-number" id="stat-done">3</div><div class="stat-bottom"><span class="up" id="stat-progress">37%</span> 总完成进度</div></div></div>
+          <div class="dashboard-grid"><div class="surface activity-chart"><div class="surface-heading"><div><h2>项目进展</h2><p>近 7 天团队任务完成趋势（演示数据）</p></div><span class="soft-select">最近 7 天 ⌄</span></div><div class="chart-shell"><div class="chart-y"><span>12</span><span>9</span><span>6</span><span>3</span><span>0</span></div><div class="chart-area"><div class="chart-gridlines"><i></i><i></i><i></i><i></i><i></i></div><div class="bar-set"><div class="bar-column"><span style="--h:40%"></span><small>周一</small></div><div class="bar-column"><span style="--h:58%"></span><small>周二</small></div><div class="bar-column"><span style="--h:36%"></span><small>周三</small></div><div class="bar-column"><span style="--h:78%"></span><small>周四</small></div><div class="bar-column"><span style="--h:62%"></span><small>周五</small></div><div class="bar-column"><span style="--h:88%"></span><small>周六</small></div><div class="bar-column"><span style="--h:72%"></span><small>周日</small></div></div></div></div><div class="chart-footer"><span><i class="legend"></i> 完成任务</span><span>与上周相比 <strong>+18.6% ↗</strong></span></div></div><div class="surface upcoming"><div class="surface-heading"><div><h2>待办事项</h2><p>下一步值得关注的任务</p></div><button class="link-button" data-page="projects">查看全部 ↗</button></div><div id="tasks-summary" class="task-summary"></div></div></div>
+          <div class="surface project-surface"><div class="surface-heading"><div><h2>最近项目</h2><p>团队正在协同推进的工作</p></div><button class="link-button" data-page="projects">所有项目 ↗</button></div><div class="table-scroll"><table><thead><tr><th>项目名称</th><th>状态</th><th>任务进度</th><th>更新日期</th><th></th></tr></thead><tbody id="recent-projects"></tbody></table></div></div>
+        </section>
+        <section class="page-panel hidden" id="page-projects"><div class="page-head"><div><p class="eyebrow">WORKSPACE / PROJECTS</p><h1>项目管理</h1><p class="page-subtitle">清晰规划每个项目的目标与任务。</p></div><button class="primary-button" data-action="new-project">＋ 创建项目</button></div><div class="surface project-list"><div class="list-toolbar"><h2>所有项目 <span class="small-count" id="project-total">4</span></h2><input class="search-input" id="project-search" placeholder="⌕  搜索项目..." aria-label="搜索项目"></div><div class="table-scroll"><table><thead><tr><th>项目名称</th><th>状态</th><th>任务</th><th>负责人</th><th>操作</th></tr></thead><tbody id="all-projects"></tbody></table></div></div><div class="surface task-list"><div class="surface-heading"><div><h2>任务清单</h2><p>可以切换任务完成状态，数据保存在当前浏览器</p></div><button class="secondary-button" data-action="new-task">＋ 添加任务</button></div><div id="all-tasks" class="task-items"></div></div></section>
+        <section class="page-panel hidden" id="page-team"><div class="page-head"><div><p class="eyebrow">WORKSPACE / PEOPLE</p><h1>团队成员</h1><p class="page-subtitle">保持透明沟通，创造顺畅的合作体验。</p></div><span class="outline-tag">Demo members</span></div><div class="surface"><div class="surface-heading"><div><h2>成员列表</h2><p>演示数据，仅供 UI 体验</p></div><span class="soft-select">4 位成员</span></div><div id="team-rows"></div></div></section>
+        <section class="page-panel hidden" id="page-billing"><div class="page-head"><div><p class="eyebrow">WORKSPACE / BILLING</p><h1>订阅与账单</h1><p class="page-subtitle">根据团队规模，选择合适的协作方式。</p></div><span class="outline-tag">尚未接入支付</span></div><div class="billing-grid"><div class="surface plan-card"><span class="plan-name">FREE</span><h2>个人与小型团队</h2><div class="price">¥0<span> / 月</span></div><p>探索 OrbitFlow 的基础协作能力。</p><ul><li>✓ 项目与任务管理</li><li>✓ 基础仪表盘</li><li>✓ 多工作区体验</li></ul><button class="secondary-button" disabled>当前演示计划</button></div><div class="surface plan-card featured"><span class="plan-name">PRO · 方案示意</span><h2>面向成长型团队</h2><div class="price">定价待定</div><p>未来计划提供更丰富的权限与自动化。</p><ul><li>✓ 团队角色与权限细分</li><li>✓ 高级分析与工作流</li><li>✓ 外部集成</li></ul><button class="primary-button" data-action="payment-notice">尚未开放订阅</button></div></div></section>
+        <section class="page-panel hidden" id="page-settings"><div class="page-head"><div><p class="eyebrow">WORKSPACE / PREFERENCES</p><h1>偏好设置</h1><p class="page-subtitle">打造更符合自己习惯的工作空间。</p></div></div><div class="surface settings-card"><div class="surface-heading"><div><h2>显示选项</h2><p>这些选项仅影响演示页面</p></div></div><div class="setting-row"><div><strong>深色模式</strong><p>使用柔和的深色界面</p></div><button class="secondary-button" id="theme-toggle-settings">切换主题</button></div><div class="setting-row"><div><strong>恢复演示数据</strong><p>清空本地修改并恢复预设项目与任务</p></div><button class="secondary-button" id="reset-demo-settings">重置数据</button></div></div></section>
+      </main>
+      <footer class="footer"><span>© 2026 OrbitFlow · Interface preview</span><span>Based on Flux UI design language · <a href="https://fluxui.dev/" target="_blank" rel="noopener">fluxui.dev</a></span></footer>
+    </div>
+  </div>
+  <div class="modal-backdrop hidden" id="modal-backdrop"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><div class="modal-header"><div><p class="eyebrow">WORKSPACE ACTION</p><h2 id="modal-title">创建项目</h2></div><button id="close-modal" class="icon-button" aria-label="关闭">×</button></div><form id="new-item-form"><label for="new-item-name" id="new-item-label">项目名称</label><input required maxlength="80" id="new-item-name" placeholder="输入名称"><div class="modal-actions"><button type="button" class="secondary-button" id="cancel-modal">取消</button><button type="submit" class="primary-button">保存</button></div></form></div></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

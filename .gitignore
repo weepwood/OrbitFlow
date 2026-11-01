@@ -1,0 +1,16 @@
+/.phpunit.cache
+/node_modules
+/public/build
+/public/hot
+/vendor
+/.env
+/.env.*
+!/.env.example
+/auth.json
+/database/*.sqlite
+/storage/*.key
+/storage/logs/*
+!/storage/logs/.gitkeep
+/bootstrap/cache/*.php
+/.idea
+/.vscode
