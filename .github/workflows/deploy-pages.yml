@@ -43,7 +43,9 @@ jobs:
           touch database/database.sqlite
           php artisan key:generate
           php artisan migrate --force
-          echo "ORBITFLOW_PREVIEW_PASSWORD=$(openssl rand -hex 24)" >> "$GITHUB_ENV"
+          preview_password="$(openssl rand -hex 24)"
+          echo "::add-mask::$preview_password"
+          echo "ORBITFLOW_PREVIEW_PASSWORD=$preview_password" >> "$GITHUB_ENV"
       - name: 构造仅用于导出快照的匿名演示数据
         run: php artisan db:seed --class=PagesPreviewSeeder --force
       - name: 运行 Laravel 并导出真实 Flux 组件的 HTML 快照
