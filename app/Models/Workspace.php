@@ -11,6 +11,6 @@ class Workspace extends Model
     protected $fillable = ['name', 'owner_id'];
 
     public function owner(): BelongsTo { return $this->belongsTo(User::class, 'owner_id'); }
-    public function users(): BelongsToMany { return $this->belongsToMany(User::class)->withPivot('role')->withTimestamps(); }
+    public function users(): BelongsToMany { return $this->belongsToMany(User::class, 'workspace_user')->withPivot('role')->withTimestamps(); }
     public function projects(): HasMany { return $this->hasMany(Project::class); }
 }
