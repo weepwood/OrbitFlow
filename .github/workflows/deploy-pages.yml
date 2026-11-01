@@ -1,11 +1,8 @@
-name: 部署 OrbitFlow 静态演示到 GitHub Pages
+name: 使用真实 Flux UI 渲染并部署 Pages 只读预览
 
 on:
   push:
     branches: [main]
-    paths:
-      - 'docs/**'
-      - '.github/workflows/deploy-pages.yml'
   workflow_dispatch:
 
 permissions:
@@ -18,26 +15,59 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: 拉取仓库
+      - name: 检出项目
         uses: actions/checkout@v4
-      - name: 校验静态站点文件
+      - name: 安装 PHP 及 SQLite 扩展
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, pdo_sqlite, sqlite3, dom, fileinfo
+          coverage: none
+      - name: 安装 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: 安装 PHP 与 Flux UI 依赖
+        run: composer install --no-interaction --prefer-dist --no-progress
+      - name: 编译 Tailwind CSS 与 Flux UI 资源
+        run: npm install --no-audit --no-fund && npm run build
+      - name: 创建独立的演示数据库
         run: |
-          test -s docs/index.html
-          test -s docs/styles.css
-          test -s docs/app.js
-          node --check docs/app.js
+          cp .env.example .env
+          touch database/database.sqlite
+          php artisan key:generate
+          php artisan migrate --force
+          echo "ORBITFLOW_PREVIEW_PASSWORD=$(openssl rand -hex 24)" >> "$GITHUB_ENV"
+      - name: 构造仅用于导出快照的匿名演示数据
+        run: php artisan db:seed --class=PagesPreviewSeeder --force
+      - name: 运行 Laravel 并导出真实 Flux 组件的 HTML 快照
+        run: |
+          php artisan serve --host=127.0.0.1 --port=8000 > /tmp/orbitflow-laravel.log 2>&1 &
+          for i in $(seq 1 35); do
+            if curl --fail --silent http://127.0.0.1:8000/login > /dev/null; then break; fi
+            sleep 1
+          done
+          python3 scripts/export_flux_preview.py --output "${RUNNER_TEMP}/flux-pages"
+      - name: 校验导出产物
+        run: |
+          test -s "${RUNNER_TEMP}/flux-pages/index.html"
+          test -s "${RUNNER_TEMP}/flux-pages/projects.html"
+          test -s "${RUNNER_TEMP}/flux-pages/team.html"
+          test -s "${RUNNER_TEMP}/flux-pages/build/manifest.json"
+          grep -q '真实 Flux UI' "${RUNNER_TEMP}/flux-pages/index.html"
+          ! grep -R -l '127.0.0.1:8000' "${RUNNER_TEMP}/flux-pages" --include='*.html'
       - name: 配置 GitHub Pages
         uses: actions/configure-pages@v5
-      - name: 上传静态文件
+      - name: 上传 Flux UI 渲染快照
         uses: actions/upload-pages-artifact@v4
         with:
-          path: docs
+          path: ${{ runner.temp }}/flux-pages
       - name: 发布到 GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

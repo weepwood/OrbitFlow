@@ -127,20 +127,27 @@ npm run build
 
 项目源码自编写并按需使用 Flux UI Free 组件，不包含 Flux Pro 授权或私有包。
 
-## GitHub Pages — UI 演示站
+## GitHub Pages — 基于真正 Flux UI 的只读渲染快照
 
-> **重要**：GitHub Pages 只能提供静态站点，不能运行 PHP / Laravel、Livewire 后端、数据库及身份认证。正式 SaaS 需部署在支持 PHP 8.2+、数据库和持久化存储的服务器或 PaaS 上。
+> GitHub Pages **不能运行** PHP、Laravel、Livewire 状态交互、登录或数据库。这里展示的是 GitHub Actions 在真实 Laravel + Flux 环境中服务端渲染的 HTML **只读快照**，而不是可交互 SaaS。要体验真实操作，请部署 Laravel 到 PHP 服务器。
 
-仓库包含独立的 `/docs` 演示站（`index.html`、`styles.css`、`app.js`），供 GitHub Pages 展示 OrbitFlow 的主要后台页面。演示站的交互数据保存在浏览器 `localStorage` 中，**不接入后端，也不使用真正的 Flux Blade 组件**；Laravel 中的 Flux UI 页面以 `resources/views/` 为准。
+此前的 `docs/index.html` 和 `docs/styles.css` 为手写的静态仿制页面，**不是 Flux 组件**，不应作为 Flux UI 演示。本项目已停止发布那套静态仿制页面。
 
-- 演示地址（在 GitHub Pages 启用且 Actions 成功后）：https://weepwood.github.io/OrbitFlow/
-- 自动发布工作流：`.github/workflows/deploy-pages.yml`
-- 工作流从 `docs/` 发布，每次修改 `docs/**` 或手动触发时重新部署。
+现在的 `.github/workflows/deploy-pages.yml` 在 GitHub Actions 中：
 
-第一次部署：进入仓库 **Settings → Pages → Build and deployment → Source → GitHub Actions**。此设置需要仓库管理员进行，不能仅依靠默认的 `GITHUB_TOKEN` 自动完成首次开通。然后在 **Actions** 中运行「部署 OrbitFlow 静态演示到 GitHub Pages」工作流。部署失败时请检查 Pages 是否启用、Actions 权限及工作流日志。
+1. 通过 Composer 安装 `livewire/flux`，并使用 Vite 构建 Tailwind + 官方 Flux CSS。
+2. 创建临时 SQLite 数据库，填充不含真实用户信息的演示记录。
+3. 运行 Laravel，登录临时演示用户，通过 `scripts/export_flux_preview.py` 读取 `/dashboard`、`/projects`、`/team`、`/billing`、`/settings` 的真实 **Blade/Flux 渲染 HTML**。
+4. 删除 Session/CSRF/Livewire 状态和交互脚本，只发布脱敏的 HTML 以及编译后的 CSS 资源到 GitHub Pages。
+
+预览地址：https://weepwood.github.io/OrbitFlow/ （构建成功后）
+
+源组件位于 `resources/views/components/layouts/` 与 `resources/views/livewire/`：包含 `<flux:sidebar>`、`<flux:button>`、`<flux:input>`、`<flux:table>`、`<flux:modal>`、`<flux:select>` 等真实组件。
+
+静态预览的按钮、表单、任务更改等均无法运行：这是 Pages 平台限制，而非 Flux UI 组件缺失。正式 SaaS 应部署 Laravel、数据库、SESSION、队列、缓存以及 Vite 资源，并启用 HTTPS。
 
 ### 正式 SaaS 部署
 
-- 服务器运行 `public/index.php`，配好 Composer 与 Laravel 所需 PHP 扩展、HTTPS、数据库和 `.env`；前端资源由 Vite 编译。
-- 生产环境至少设置 `APP_ENV=production`、`APP_DEBUG=false`，配置安全密钥、持久化数据库、邮件服务和备份监控。
-- 如果要对外开放注册，需先完善密码找回、邮箱验证与租户授权审计；计费功能当前只是展示界面。
+- 服务器运行 `public/index.php`，安装 PHP 8.3+、Composer 与 Laravel 所需扩展；生产数据库可采用 PostgreSQL。
+- 设置 `APP_ENV=production`、`APP_DEBUG=false`，生成独立生产密钥，并配置 HTTPS、会话存储、邮件、监控和备份。
+- 对外开放注册前，补充找回密码、邮箱验证、租户授权审计；计费功能目前仅用于展示。
