@@ -78,7 +78,9 @@ class ProjectsPage extends Component
 
     public function render()
     {
-        $query = WorkspaceContext::current()->projects()->withCount('tasks')->latest();
+        $query = WorkspaceContext::current()->projects()
+            ->withCount(['tasks', 'tasks as done_tasks_count' => fn ($q) => $q->where('status', 'done')])
+            ->latest();
         if ($this->search !== '') $query->where('name', 'like', '%'.addcslashes($this->search, '%_\\').'%');
         if ($this->filter !== 'all') {
             abort_unless(in_array($this->filter, ['planning','active','on_hold','completed'], true), 422);

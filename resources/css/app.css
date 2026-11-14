@@ -6,14 +6,221 @@
 
 @theme {
   --font-sans: Inter, 'Noto Sans SC', ui-sans-serif, system-ui, sans-serif;
-  --color-brand-50: #eef2ff;
-  --color-brand-500: #6366f1;
-  --color-brand-600: #4f46e5;
+  --color-brand-50: #f0efff;
+  --color-brand-500: #6356d9;
+  --color-brand-600: #5145c4;
+  --color-accent: #6356d9;
+  --color-accent-content: #5145c4;
+  --color-accent-foreground: #ffffff;
 }
-:root { color-scheme: light; }
-.dark { color-scheme: dark; }
-body { font-family: var(--font-sans); }
-.surface { @apply rounded-2xl border border-zinc-200/85 bg-white shadow-sm dark:border-zinc-700 dark:bg-zinc-900; }
-.stat-value { @apply mt-3 text-3xl font-semibold tracking-tight text-zinc-950 dark:text-white; }
-.section-kicker { @apply text-[11px] font-semibold uppercase tracking-[0.18em] text-indigo-600 dark:text-indigo-400; }
-.dot { @apply inline-block h-2 w-2 rounded-full; }
+@layer theme {
+  .dark {
+    --color-accent: #a39af6;
+    --color-accent-content: #b7afff;
+    --color-accent-foreground: #181628;
+  }
+}
+
+:root {
+  color-scheme: light;
+  --orbit-canvas: #f7f8fb;
+  --orbit-surface: #ffffff;
+  --orbit-line: #e8eaf0;
+  --orbit-ink: #202537;
+  --orbit-muted: #73798b;
+  --orbit-accent: #6356d9;
+  --orbit-shadow: 0 2px 5px rgba(20, 28, 55, .018), 0 14px 40px -28px rgba(20, 28, 55, .17);
+}
+.dark {
+  color-scheme: dark;
+  --orbit-canvas: #101117;
+  --orbit-surface: #1a1b23;
+  --orbit-line: #30313b;
+  --orbit-ink: #f2f2f7;
+  --orbit-muted: #a3a3b1;
+  --orbit-accent: #a39af6;
+  --orbit-shadow: 0 10px 28px -20px rgba(0, 0, 0, .7);
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-sans);
+  color: var(--orbit-ink);
+  background: var(--orbit-canvas);
+  font-feature-settings: 'cv11', 'ss01';
+  -webkit-font-smoothing: antialiased;
+}
+::selection { background: #dcd8ff; color: #28244a; }
+.dark ::selection { background: #5145a7; color: #fff; }
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--orbit-accent);
+  outline-offset: 3px;
+}
+.surface {
+  @apply rounded-2xl border border-zinc-200/80 bg-white dark:border-zinc-800 dark:bg-zinc-900;
+  box-shadow: var(--orbit-shadow);
+}
+.stat-value {
+  @apply mt-4 text-[32px] leading-none font-semibold tracking-[-0.055em] text-zinc-950 tabular-nums dark:text-white;
+}
+.section-kicker {
+  @apply text-[10px] font-bold uppercase tracking-[0.19em] text-indigo-600 dark:text-indigo-300;
+}
+.dot { @apply inline-block size-2 rounded-full; }
+
+/* A quiet visual system, shared by the real Flux UI screens and the landing page. */
+.orbit-sidebar {
+  background: linear-gradient(170deg, #ffffff 0%, #fbfbfe 76%, #f8f8fd 100%);
+}
+.dark .orbit-sidebar {
+  background: linear-gradient(160deg, #1b1b23, #16171e);
+}
+.orbit-mark {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 13px;
+  background: #25243f;
+  color: white;
+  font-weight: 800;
+  font-size: 12px;
+  letter-spacing: -.07em;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 5px 12px rgba(37,36,63,.14);
+}
+.orbit-mark::after {
+  content: '';
+  position: absolute;
+  right: -3px;
+  top: -3px;
+  width: 10px;
+  height: 10px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: #b8abff;
+}
+.dark .orbit-mark::after { border-color: #1b1b23; }
+.orbit-workspace {
+  border: 1px solid var(--orbit-line);
+  background: rgba(246, 247, 252, .7);
+  border-radius: 15px;
+  padding: 13px;
+  transition: border-color .2s ease, background .2s ease;
+}
+.orbit-workspace:focus-within { border-color: var(--orbit-accent); }
+.dark .orbit-workspace { background: rgba(255,255,255,.025); }
+.orbit-workspace select { min-width: 0; color: var(--orbit-ink); }
+.orbit-workspace option { color: #202537; background: white; }
+.orbit-nav-label { letter-spacing: .16em; }
+.orbit-avatar {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  color: #5044ac;
+  background: #eae6ff;
+  font-weight: 700;
+  font-size: 12px;
+}
+.dark .orbit-avatar { color: #cbc5ff; background: #3a335c; }
+.orbit-shell-main { min-height: 100dvh; }
+.orbit-breadcrumb { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--orbit-muted); }
+.orbit-breadcrumb-separator { width: 1px; height: 12px; background: var(--orbit-line); transform: rotate(20deg); }
+.orbit-page-title { letter-spacing: -.045em; }
+
+.orbit-stat-card {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+}
+.orbit-stat-card:hover {
+  transform: translateY(-2px);
+  border-color: #cbc7eb;
+  box-shadow: 0 18px 38px -27px rgba(53, 47, 100, .32);
+}
+.dark .orbit-stat-card:hover { border-color: #53506c; }
+.orbit-stat-card::before {
+  position: absolute;
+  top: 0;
+  left: 24px;
+  right: 24px;
+  height: 2px;
+  content: '';
+  background: linear-gradient(90deg, transparent, #b9b1ee, transparent);
+  opacity: 0;
+  transition: opacity .2s ease;
+}
+.orbit-stat-card:hover::before { opacity: 1; }
+.orbit-icon-tile {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 13px;
+}
+.orbit-panel-heading { @apply flex items-center justify-between gap-4 border-b border-zinc-100 px-6 py-5 dark:border-zinc-800; }
+.orbit-progress-track {
+  height: 6px;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 100px;
+  background: #eeedf5;
+}
+.dark .orbit-progress-track { background: #34343e; }
+.orbit-progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #6e61e8, #a99bf5);
+}
+.orbit-project-row {
+  transition: background-color .18s ease;
+}
+.orbit-project-row:hover { background: #fafaff; }
+.dark .orbit-project-row:hover { background: #252530; }
+.orbit-focus-panel {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #24243c;
+  color: #fff;
+}
+.orbit-focus-panel::after {
+  position: absolute;
+  content: '';
+  width: 190px;
+  height: 190px;
+  right: -68px;
+  top: -80px;
+  border: 1px solid rgba(205, 198, 255, .16);
+  border-radius: 50%;
+  box-shadow: 0 0 0 28px rgba(205, 198, 255, .035), 0 0 0 55px rgba(205, 198, 255, .025);
+  pointer-events: none;
+}
+.orbit-feature-card {
+  transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+.orbit-feature-card:hover {
+  transform: translateY(-3px);
+  border-color: #cbc8ed;
+  box-shadow: 0 20px 46px -34px rgba(47, 37, 104, .35);
+}
+.orbit-hero-glow {
+  background: radial-gradient(ellipse 55% 50% at 80% 34%, rgba(150, 140, 242, .16), transparent 80%);
+}
+.orbit-mock-screen {
+  box-shadow: 0 32px 100px -43px rgba(35, 32, 91, .32), 0 5px 20px -12px rgba(35, 32, 91, .15);
+}
+.orbit-tag { @apply inline-flex items-center gap-1.5 rounded-full border border-zinc-200 bg-white px-3 py-1 text-[11px] font-medium text-zinc-600 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300; }
+
+@media (max-width: 640px) {
+  .orbit-panel-heading { @apply px-4 py-4; }
+  .stat-value { font-size: 29px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
