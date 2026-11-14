@@ -9,6 +9,16 @@
   --color-brand-50: #f0efff;
   --color-brand-500: #6356d9;
   --color-brand-600: #5145c4;
+  --color-accent: #6356d9;
+  --color-accent-content: #5145c4;
+  --color-accent-foreground: #ffffff;
+}
+@layer theme {
+  .dark {
+    --color-accent: #a39af6;
+    --color-accent-content: #b7afff;
+    --color-accent-foreground: #181628;
+  }
 }
 
 :root {
